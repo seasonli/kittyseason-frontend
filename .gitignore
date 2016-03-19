@@ -1,0 +1,7 @@
+# Directory
+node_modules/
+spm_modules/
+release/
+
+# File
+.DS_Store
