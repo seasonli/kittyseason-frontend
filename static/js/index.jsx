@@ -1,5 +1,5 @@
 var React = require('react/addons');
-var $ = require('jquery');
+var $ = require('npm-zepto');
 var Mui = require('material-ui');
 
 
