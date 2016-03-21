@@ -107,6 +107,7 @@ module.exports = function (grunt) {
           'static/**/*.*'
         ],
         tasks: [
+        a
           'htmlbuild:dev',
           'webpack:common',
           'copy:common'
