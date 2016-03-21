@@ -109,9 +109,8 @@ module.exports = function (grunt) {
         tasks: [
           'getTime',
           'htmlbuild:dev',
-          'babel:common',
-          'copy:common',
-          'less:common'
+          'webpack:common',
+          'copy:common'
         ]
       }
     },
@@ -202,18 +201,24 @@ module.exports = function (grunt) {
 
     grunt.config.set('htmlbuild.dev.files.0.dest', dest);
     grunt.config.set('webpack.common.output.path', dest + 'static/js/');
+    grunt.config.set('webpack.common.plugins.0',
+      new webpack.optimize.UglifyJsPlugin({
+        compress: {
+          warnings: false
+        }
+      })
+    );
     grunt.config.set('copy.common.files.0.dest', dest);
     grunt.config.set('less.common.files.0.dest', dest);
 
+    grunt.task.run('clean:dev');
+    grunt.task.run('htmlbuild:dev');
+    grunt.task.run('webpack:common');
+    grunt.task.run('copy:common');
+    // grunt.task.run('less:common');
+
     if (watch) {
-      grunt.task.run('clean:dev');
       grunt.task.run('watch:common');
-    } else {
-      grunt.task.run('clean:dev');
-      grunt.task.run('htmlbuild:dev');
-      grunt.task.run('webpack:common');
-      grunt.task.run('copy:common');
-      // grunt.task.run('less:common');
     }
   });
 };
