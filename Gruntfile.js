@@ -8,7 +8,10 @@
  * @version 1.2 | 2015-02-04 | SeasonLi    // Use imagemin
  * @version 2.0 | 2015-11-22 | SeasonLi    // Strongify build tools
  * @version 3.0 | 2016-03-19 | SeasonLi    // Config for reactJS project
- **/
+ */
+
+var webpack = require('webpack');
+
 
 module.exports = function (grunt) {
   // Grunt tasks config
@@ -59,7 +62,8 @@ module.exports = function (grunt) {
           loaders: [{
             loader: 'jsx-loader'
           }]
-        }
+        },
+        plugins: []
       }
     },
     copy: {
@@ -165,6 +169,13 @@ module.exports = function (grunt) {
 
     grunt.config.set('htmlbuild.release.files.0.dest', dest);
     grunt.config.set('webpack.common.output.path', dest + 'static/js/');
+    grunt.config.set('webpack.common.plugins.0',
+      new webpack.optimize.UglifyJsPlugin({
+        compress: {
+          warnings: false
+        }
+      })
+    );
     grunt.config.set('copy.common.files.0.dest', dest);
     grunt.config.set('less.common.files.0.dest', dest);
     grunt.config.set('imagemin.common.files.0.dest', dest);
