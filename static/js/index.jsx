@@ -1,11 +1,11 @@
 var React = require('react/addons');
+var $ = require('jquery');
 var Mui = require('material-ui');
-var $ = require('zepto');
 
 
 React.render(
   <Mui.AppBar
-    title="Kittyseason" 
+    title="kittyseason" 
     iconElementLeft={
       <Mui.IconButton>
         <Mui.FontIcon className="muidocs-icon-action-home" />

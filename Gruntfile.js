@@ -46,6 +46,22 @@ module.exports = function (grunt) {
         }]
       }
     },
+    webpack: {
+      common: {
+        entry: {
+          'index': './static/js/index.jsx',
+        },
+        output: {
+          filename: '[name].js',
+          path: 'dev/static/js/'
+        },
+        module: {
+          loaders: [{
+            loader: 'jsx-loader'
+          }]
+        }
+      }
+    },
     copy: {
       common: {
         files: [{
@@ -89,6 +105,7 @@ module.exports = function (grunt) {
         tasks: [
           'getTime',
           'htmlbuild:dev',
+          'babel:common',
           'copy:common',
           'less:common'
         ]
@@ -133,6 +150,7 @@ module.exports = function (grunt) {
   // Load npm tasks
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-html-build');
+  grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
@@ -145,8 +163,8 @@ module.exports = function (grunt) {
   grunt.task.registerTask('release', function () {
     var dest = 'release/' + grunt.config.get('pkg.name') + '/' + grunt.config.get('pkg.version') + '/';
 
-    grunt.config.set('clean.release.0', dest);
     grunt.config.set('htmlbuild.release.files.0.dest', dest);
+    grunt.config.set('webpack.common.output.path', dest + 'static/js/');
     grunt.config.set('copy.common.files.0.dest', dest);
     grunt.config.set('less.common.files.0.dest', dest);
     grunt.config.set('imagemin.common.files.0.dest', dest);
@@ -156,8 +174,9 @@ module.exports = function (grunt) {
     grunt.config.set('usemin.common.files.0.cwd', dest);
     grunt.config.set('usemin.common.files.0.dest', dest);
 
-    // grunt.task.run('clean:release');
+    grunt.task.run('clean:release');
     grunt.task.run('htmlbuild:release');
+    grunt.task.run('webpack:common');
     grunt.task.run('copy:common');
     // grunt.task.run('less:common');
     // grunt.task.run('imagemin:common');
@@ -170,17 +189,20 @@ module.exports = function (grunt) {
     var dest = 'dev/',
       watch = grunt.option('watch');
 
-    grunt.config.set('clean.dev.0', dest);
     grunt.config.set('htmlbuild.dev.files.0.dest', dest);
+    grunt.config.set('webpack.common.output.path', dest + 'static/js/');
     grunt.config.set('copy.common.files.0.dest', dest);
     grunt.config.set('less.common.files.0.dest', dest);
 
     if (watch) {
+      grunt.task.run('clean:dev');
       grunt.task.run('watch:common');
     } else {
+      grunt.task.run('clean:dev');
       grunt.task.run('htmlbuild:dev');
+      grunt.task.run('webpack:common');
       grunt.task.run('copy:common');
-      grunt.task.run('less:common');
+      // grunt.task.run('less:common');
     }
   });
 };
