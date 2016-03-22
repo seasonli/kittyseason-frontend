@@ -26,7 +26,7 @@ FeedUi.FeedDialog = React.createClass({
     return ( <Mui.Dialog
         title="添加一条记录"
         modal={
-          false
+          true
         } 
         open={
           this.state.open
